@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bhaiuuu AI | 3D Gemini Quantum Workspace</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  
+  <!-- Highlight.js for Code Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  
+  <!-- Marked.js for Markdown Parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="chat.css" />
+</head>
+<body data-theme="purple">
+  
+  <!-- Canvas for 3D Background Stars & Orbiting Particle Swarm -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Ambient Light Orbs for 3D Depth -->
+  <div class="ambient-glow orb-1"></div>
+  <div class="ambient-glow orb-2"></div>
+  <div class="ambient-glow orb-3"></div>
+
+  <!-- Custom Cursor Glow -->
+  <div id="cursorGlow"></div>
+  <div id="cursorDot"></div>
+
+  <div class="app-layout">
+    
+    <!-- ========================================== -->
+    <!-- 1. GEMINI-STYLE SIDEBAR                    -->
+    <!-- ========================================== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-badge">
+          <div class="brand-logo-mini">
+            <div class="logo-ring"></div>
+            <i class="fa-solid fa-cube"></i>
+          </div>
+          <div class="brand-texts">
+            <span class="brand-name">Bhaiuuu AI</span>
+            <span class="brand-sub">SOURABH DABHDE</span>
+          </div>
+        </div>
+        <button class="icon-btn sidebar-toggle-btn" id="sidebarCollapseBtn" title="Collapse Sidebar">
+          <i class="fa-solid fa-bars-staggered"></i>
+        </button>
+      </div>
+
+      <!-- New Chat Button -->
+      <div class="new-chat-wrapper">
+        <button class="new-chat-btn" id="newChatBtn">
+          <i class="fa-solid fa-plus"></i>
+          <span>New Chat</span>
+          <span class="kbd-hint">Ctrl + N</span>
+        </button>
+      </div>
+
+      <!-- Search History Input -->
+      <div class="search-history-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchHistoryInput" placeholder="Search conversations..." />
+      </div>
+
+      <!-- Chat History Threads List -->
+      <div class="history-container" id="historyContainer">
+        <div class="history-group">
+          <div class="group-title">Recent Conversations</div>
+          <div class="threads-list" id="threadsList">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Footer (User Profile & Logout) -->
+      <div class="sidebar-footer">
+        <div class="user-profile-card" id="userProfileCard">
+          <div class="avatar-ring">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Sourabh&backgroundColor=6366f1" alt="Avatar" id="userAvatar" />
+            <span class="status-indicator online"></span>
+          </div>
+          <div class="user-meta">
+            <span class="user-name" id="userDisplayName">Sourabh Dabhde</span>
+            <span class="user-role" id="userDisplayEmail">Quantum Explorer</span>
+          </div>
+        </div>
+        <div class="sidebar-actions">
+          <button class="icon-btn" id="openSettingsBtn" title="Gemini API & System Settings">
+            <i class="fa-solid fa-gear"></i>
+          </button>
+          <button class="icon-btn logout-btn" id="logoutBtn" title="Sign Out & Return to Login">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ========================================== -->
+    <!-- 2. MAIN CHAT WORKSPACE                     -->
+    <!-- ========================================== -->
+    <main class="main-content">
+      
+      <!-- Top Header Navigation Bar -->
+      <header class="top-nav">
+        <div class="nav-left">
+          <button class="icon-btn mobile-menu-btn" id="mobileMenuBtn" title="Toggle Menu">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          
+          <!-- Model Selector Dropdown -->
+          <div class="model-selector-wrapper">
+            <div class="model-badge-btn" id="modelSelectBtn">
+              <div class="gemini-sparkle">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+              </div>
+              <div class="model-info">
+                <span class="model-name" id="currentModelName">Gemini 3.8 Flash</span>
+                <span class="model-badge" id="currentModelBadge">RECOMMENDED</span>
+              </div>
+              <i class="fa-solid fa-chevron-down arrow-icon"></i>
+            </div>
+
+            <!-- Model Options Dropdown Menu -->
+            <div class="model-dropdown-menu" id="modelDropdownMenu">
+              <div class="dropdown-header">Select Intelligence Engine</div>
+              
+              <div class="model-option active" data-model="gemini-3.8-flash">
+                <div class="option-icon"><i class="fa-solid fa-bolt"></i></div>
+                <div class="option-details">
+                  <div class="option-title-row">
+                    <span class="option-name">Gemini 3.8 Flash</span>
+                    <span class="pill pill-recommended">Latest 2026</span>
+                  </div>
+                  <span class="option-desc">Super-fast, cutting-edge intelligence for chat, multimodal vision & coding</span>
+                </div>
+                <i class="fa-solid fa-circle-check checkmark"></i>
+              </div>
+
+              <div class="model-option" data-model="gemini-3.7-flash">
+                <div class="option-icon"><i class="fa-solid fa-brain"></i></div>
+                <div class="option-details">
+                  <div class="option-title-row">
+                    <span class="option-name">Gemini 3.7 Flash</span>
+                    <span class="pill pill-pro">Deep Reason</span>
+                  </div>
+                  <span class="option-desc">Hybrid reasoning, complex logic, mathematics, and full system design</span>
+                </div>
+                <i class="fa-solid fa-circle-check checkmark"></i>
+              </div>
+
+              <div class="model-option" data-model="gemini-3.6-flash">
+                <div class="option-icon"><i class="fa-solid fa-microchip"></i></div>
+                <div class="option-details">
+                  <div class="option-title-row">
+                    <span class="option-name">Gemini 3.6 Flash</span>
+                    <span class="pill pill-nextgen">High Precision</span>
+                  </div>
+                  <span class="option-desc">Reliable multimodal performance with stable output stream</span>
+                </div>
+                <i class="fa-solid fa-circle-check checkmark"></i>
+              </div>
+
+              <div class="model-option" data-model="gemini-3.5-flash">
+                <div class="option-icon"><i class="fa-solid fa-feather"></i></div>
+                <div class="option-details">
+                  <div class="option-title-row">
+                    <span class="option-name">Gemini 3.5 Flash</span>
+                    <span class="pill pill-fast">Balanced</span>
+                  </div>
+                  <span class="option-desc">High-throughput balanced model for contextual multi-turn conversation</span>
+                </div>
+                <i class="fa-solid fa-circle-check checkmark"></i>
+              </div>
+
+              <div class="model-option" data-model="gemini-3.1-flash-lite">
+                <div class="option-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                <div class="option-details">
+                  <div class="option-title-row">
+                    <span class="option-name">Gemini 3.1 Flash Lite</span>
+                    <span class="pill">Blazing Fast</span>
+                  </div>
+                  <span class="option-desc">Ultra-low latency engine designed for rapid execution & micro-tasks</span>
+                </div>
+                <i class="fa-solid fa-circle-check checkmark"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-right">
+          <!-- 3D Core View Toggle -->
+          <button class="nav-control-btn active" id="toggle3DCoreBtn" title="Toggle 3D Holographic AI Core">
+            <i class="fa-solid fa-globe"></i>
+            <span class="btn-text">3D Core</span>
+          </button>
+
+          <!-- Audio FX Toggle -->
+          <button class="nav-control-btn" id="soundToggle" title="Toggle Audio FX">
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+
+          <!-- Theme Aura Switcher -->
+          <div class="accent-picker" title="Switch Dynamic Theme Aura">
+            <span class="accent-dot active" data-color="purple" style="--c: #a855f7;"></span>
+            <span class="accent-dot" data-color="cyan" style="--c: #06b6d4;"></span>
+            <span class="accent-dot" data-color="emerald" style="--c: #10b981;"></span>
+            <span class="accent-dot" data-color="rose" style="--c: #f43f5e;"></span>
+          </div>
+
+          <!-- Quick Return to Login / Switch Portal -->
+          <a href="index.html" class="nav-portal-link" title="Go to 3D Login Portal">
+            <i class="fa-solid fa-door-open"></i>
+            <span>Portal</span>
+          </a>
+        </div>
+      </header>
+
+      <!-- Chat Content Scroll Area -->
+      <div class="chat-viewport" id="chatViewport">
+        
+        <!-- ========================================== -->
+        <!-- 3. INTERACTIVE 3D HOLOGRAPHIC AI CORE      -->
+        <!-- ========================================== -->
+        <section class="ai-core-section" id="aiCoreSection">
+          <div class="ai-core-container">
+            <canvas id="coreCanvas" width="420" height="260"></canvas>
+            <div class="core-hologram-ring ring-1"></div>
+            <div class="core-hologram-ring ring-2"></div>
+            <div class="core-status-pill">
+              <span class="pulse-dot"></span>
+              <span id="coreStatusText">BHAIUUU QUANTUM CORE // IDLE</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Welcome Hero View (when no messages) -->
+        <section class="welcome-hero" id="welcomeHero">
+          <div class="hero-badge">
+            <i class="fa-solid fa-sparkles"></i>
+            <span>GEMINI POWERED 3D INTELLIGENCE</span>
+          </div>
+          <h1 class="hero-title">
+            Namaste, <span class="gradient-text" id="heroUserName">Sourabh</span>! 🚀
+          </h1>
+          <p class="hero-subtitle">
+            What vision or code shall we create today in the Bhaiuuu Quantum Matrix?
+          </p>
+
+          <!-- High-Tech Prompt Starter Cards -->
+          <div class="prompt-starters-grid">
+            <div class="starter-card" data-prompt="Design a high-performance full-stack Node.js and Express REST API architecture with JWT authentication and real-time WebSockets.">
+              <div class="card-icon-3d"><i class="fa-solid fa-code"></i></div>
+              <div class="card-content">
+                <span class="card-title">Full-Stack Code</span>
+                <span class="card-desc">Architect scalable Node.js & Express systems with JWT & WebSockets</span>
+              </div>
+              <i class="fa-solid fa-arrow-up-right-from-square card-arrow"></i>
+            </div>
+
+            <div class="starter-card" data-prompt="Explain quantum entanglement and superposition in intuitive real-world terms, then show how quantum computing will disrupt AI.">
+              <div class="card-icon-3d"><i class="fa-solid fa-atom"></i></div>
+              <div class="card-content">
+                <span class="card-title">Quantum Deep Dive</span>
+                <span class="card-desc">Master quantum entanglement, qubits, and how AI meets physics</span>
+              </div>
+              <i class="fa-solid fa-arrow-up-right-from-square card-arrow"></i>
+            </div>
+
+            <div class="starter-card" data-prompt="Write a complete 3D interactive particle vortex effect using Three.js or HTML5 Canvas with neon color shifting and mouse physics.">
+              <div class="card-icon-3d"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+              <div class="card-content">
+                <span class="card-title">3D Visual Engine</span>
+                <span class="card-desc">Generate Three.js & Canvas code for futuristic glowing animations</span>
+              </div>
+              <i class="fa-solid fa-arrow-up-right-from-square card-arrow"></i>
+            </div>
+
+            <div class="starter-card" data-prompt="Give me a comprehensive strategy to master Next.js 15, Gemini AI Agent development, and Docker deployment in 30 days.">
+              <div class="card-icon-3d"><i class="fa-solid fa-bullseye"></i></div>
+              <div class="card-content">
+                <span class="card-title">Mastery Roadmap</span>
+                <span class="card-desc">30-day accelerated blueprint for modern full-stack & AI engineering</span>
+              </div>
+              <i class="fa-solid fa-arrow-up-right-from-square card-arrow"></i>
+            </div>
+          </div>
+        </section>
+
+        <!-- Messages Feed -->
+        <div class="messages-feed" id="messagesFeed">
+          <!-- Dynamically inserted messages will appear here -->
+        </div>
+
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 4. FLOATING 3D GLASS INPUT DOCK            -->
+      <!-- ========================================== -->
+      <footer class="input-dock-container">
+        <div class="input-dock-card" id="inputDockCard">
+          
+          <!-- Image Attachment Preview Bar -->
+          <div class="attachment-preview-bar" id="attachmentPreviewBar" style="display: none;">
+            <div class="preview-thumbnail-wrapper">
+              <img id="attachmentThumbnail" src="" alt="Attached image preview" />
+              <button class="remove-attachment-btn" id="removeAttachmentBtn" title="Remove image">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            <div class="attachment-info">
+              <span class="attachment-name" id="attachmentName">image.png</span>
+              <span class="attachment-tag">Gemini Vision Multimodal Attached</span>
+            </div>
+          </div>
+
+          <!-- Active Tools Pill Bar -->
+          <div class="tools-pill-bar">
+            
+            <!-- Google Search Grounding Toggle -->
+            <button class="tool-pill" id="toolSearchToggle" title="Enable Google Search Grounding for real-time web knowledge">
+              <i class="fa-solid fa-globe"></i>
+              <span>Web Search</span>
+              <span class="tool-status-dot"></span>
+            </button>
+
+            <!-- Deep Thinking Mode Toggle -->
+            <button class="tool-pill" id="toolThinkingToggle" title="Toggle Deep Thinking reasoning mode">
+              <i class="fa-solid fa-brain"></i>
+              <span>Deep Thinking</span>
+              <span class="tool-status-dot"></span>
+            </button>
+
+            <!-- Code Execution Mode -->
+            <button class="tool-pill" id="toolCodeModeToggle" title="Optimize responses with executable code and syntax formatting">
+              <i class="fa-solid fa-terminal"></i>
+              <span>Code Mode</span>
+              <span class="tool-status-dot"></span>
+            </button>
+
+            <!-- Active Model Indicator -->
+            <div class="tool-info-indicator">
+              <i class="fa-solid fa-shield-halved"></i>
+              <span id="dockModelLabel">Gemini 3.8 Flash</span>
+            </div>
+          </div>
+
+          <!-- Text Input Form -->
+          <form class="dock-input-form" id="chatForm">
+            
+            <!-- Image / Vision Multimodal Upload Button -->
+            <input type="file" id="imageFileInput" accept="image/png, image/jpeg, image/webp" style="display: none;" />
+            <button type="button" class="dock-action-btn" id="attachImageBtn" title="Upload Image for Gemini Vision Analysis">
+              <i class="fa-solid fa-paperclip"></i>
+            </button>
+
+            <!-- Expanding Auto-height Textarea -->
+            <textarea
+              id="promptInput"
+              rows="1"
+              placeholder="Ask Bhaiuuu Gemini anything... (Type your question, paste code, or ask in Hindi/English)"
+              autocomplete="off"
+            ></textarea>
+
+            <!-- Voice Recognition (Mic) Button -->
+            <button type="button" class="dock-action-btn mic-btn" id="voiceInputBtn" title="Voice Input (Speech-to-Text)">
+              <i class="fa-solid fa-microphone"></i>
+            </button>
+
+            <!-- Send Button -->
+            <button type="submit" class="send-btn" id="sendBtn" title="Send Prompt (Enter)">
+              <i class="fa-solid fa-arrow-up"></i>
+              <div class="btn-ripple"></div>
+            </button>
+          </form>
+
+          <div class="dock-footer-disclaimer">
+            <span>Bhaiuuu AI may display information that should be verified. Powered by Google Gemini Intelligence.</span>
+          </div>
+
+        </div>
+      </footer>
+
+    </main>
+
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 5. CONFIGURATION & SETTINGS MODAL          -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="settingsModal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fa-solid fa-sliders"></i>
+          <span>Bhaiuuu Quantum Settings</span>
+        </div>
+        <button class="icon-btn modal-close-btn" id="closeSettingsBtn">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        
+        <div class="setting-item">
+          <label class="setting-label" for="customApiKeyInput">
+            <span>Google Gemini API Key</span>
+            <span class="status-badge" id="apiKeyStatusBadge">Configured in Server ✅</span>
+          </label>
+          <div class="setting-input-wrapper">
+            <input type="password" id="customApiKeyInput" placeholder="AQ.Ab8RN6IxmoVNL2IX... or leave blank to use server key" />
+            <button type="button" class="eye-toggle" id="apiKeyVisibilityBtn">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+          <span class="setting-hint">Your API Key is saved securely in your backend `.env` file. You can also override it here locally.</span>
+        </div>
+
+        <div class="setting-item">
+          <label class="setting-label" for="systemPromptInput">
+            <span>Custom System Persona</span>
+          </label>
+          <textarea id="systemPromptInput" rows="3" placeholder="Define Bhaiuuu AI's personality, domain expertise, or role..."></textarea>
+          <span class="setting-hint">Guides how Bhaiuuu Gemini answers your questions and writes code.</span>
+        </div>
+
+        <div class="setting-item">
+          <label class="setting-label">
+            <span>Creativity Temperature</span>
+            <span class="temp-val" id="tempValDisplay">0.7</span>
+          </label>
+          <input type="range" id="temperatureSlider" min="0" max="1" step="0.05" value="0.7" />
+          <div class="range-labels">
+            <span>Precise (0.0)</span>
+            <span>Balanced (0.7)</span>
+            <span>Creative (1.0)</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" id="resetSettingsBtn">Reset Defaults</button>
+        <button type="button" class="btn-primary" id="saveSettingsBtn">Save Preferences</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- JavaScript -->
+  <script src="chat.js"></script>
+</body>
+</html>

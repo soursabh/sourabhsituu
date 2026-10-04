@@ -1,0 +1,881 @@
+/* ==========================================================================
+   BHAIUUU 3D PORTAL - ULTRA MODERN STYLESHEET
+   ========================================================================== */
+
+:root {
+  /* Default Color Palette: Cyber Cosmic Purple */
+  --primary: #9333ea;
+  --primary-glow: rgba(147, 51, 234, 0.45);
+  --secondary: #06b6d4;
+  --secondary-glow: rgba(6, 182, 212, 0.4);
+  --accent: #f43f5e;
+  --accent-glow: rgba(244, 63, 94, 0.35);
+
+  /* Background & Glass Surfaces */
+  --bg-dark: #070814;
+  --bg-deep: #0b0d1e;
+  --card-bg: rgba(15, 18, 37, 0.65);
+  --card-border: rgba(255, 255, 255, 0.09);
+  --card-border-glow: rgba(147, 51, 234, 0.3);
+  --input-bg: rgba(22, 27, 52, 0.55);
+  --input-border: rgba(255, 255, 255, 0.08);
+
+  /* Typography */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  /* Font Families */
+  --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+
+  /* Dynamic 3D Glare & Tilt Values */
+  --glare-x: 50%;
+  --glare-y: 50%;
+  --glare-opacity: 0;
+}
+
+/* Accent Themes via Data Attribute */
+[data-theme="cyan"] {
+  --primary: #06b6d4;
+  --primary-glow: rgba(6, 182, 212, 0.45);
+  --secondary: #3b82f6;
+  --secondary-glow: rgba(59, 130, 246, 0.4);
+  --card-border-glow: rgba(6, 182, 212, 0.3);
+}
+
+[data-theme="emerald"] {
+  --primary: #10b981;
+  --primary-glow: rgba(16, 185, 129, 0.45);
+  --secondary: #06b6d4;
+  --secondary-glow: rgba(6, 182, 212, 0.4);
+  --card-border-glow: rgba(16, 185, 129, 0.3);
+}
+
+[data-theme="rose"] {
+  --primary: #f43f5e;
+  --primary-glow: rgba(244, 63, 94, 0.45);
+  --secondary: #a855f7;
+  --secondary-glow: rgba(168, 85, 247, 0.4);
+  --card-border-glow: rgba(244, 63, 94, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  background-color: var(--bg-dark);
+  font-family: var(--font-main);
+  color: var(--text-primary);
+  user-select: none;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  position: relative;
+  background: radial-gradient(circle at 50% 20%, #151833 0%, var(--bg-deep) 45%, var(--bg-dark) 100%);
+  perspective: 1200px;
+}
+
+/* ==========================================================================
+   PARTICLE CANVAS & AMBIENT ORBS
+   ========================================================================== */
+
+#particleCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Ambient 3D Glowing Orbs in Background - Hardware Accelerated */
+.ambient-glow {
+  position: fixed;
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  animation: floatOrbs 20s ease-in-out infinite alternate;
+}
+
+.orb-1 {
+  width: 500px;
+  height: 500px;
+  top: -100px;
+  left: 8%;
+  background: radial-gradient(circle, var(--primary-glow) 0%, rgba(147, 51, 234, 0.12) 40%, transparent 70%);
+}
+
+.orb-2 {
+  width: 550px;
+  height: 550px;
+  bottom: -120px;
+  right: 8%;
+  background: radial-gradient(circle, var(--secondary-glow) 0%, rgba(6, 182, 212, 0.1) 40%, transparent 70%);
+  animation-duration: 25s;
+  animation-delay: -5s;
+}
+
+.orb-3 {
+  width: 320px;
+  height: 320px;
+  top: 45%;
+  left: 55%;
+  background: radial-gradient(circle, var(--accent-glow) 0%, rgba(244, 63, 94, 0.08) 40%, transparent 70%);
+  animation-duration: 18s;
+  animation-delay: -10s;
+}
+
+@keyframes floatOrbs {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(40px, -30px, 0) scale(1.08); }
+  100% { transform: translate3d(-30px, 35px, 0) scale(0.95); }
+}
+
+/* ==========================================================================
+   CUSTOM CURSOR & GLOW - HARDWARE ACCELERATED
+   ========================================================================== */
+
+#cursorGlow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(147, 51, 234, 0.16) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 2;
+  will-change: transform;
+  transform: translate3d(-1000px, -1000px, 0);
+}
+
+#cursorDot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 10px #ffffff, 0 0 18px var(--primary);
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+  transform: translate3d(-1000px, -1000px, 0);
+}
+
+/* ==========================================================================
+   TOP CONTROL BAR (Sound & Color Presets)
+   ========================================================================== */
+
+.top-controls {
+  position: fixed;
+  top: 25px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  z-index: 100;
+  backdrop-filter: blur(15px);
+  background: rgba(18, 22, 45, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 8px 16px;
+  border-radius: 50px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.control-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.control-btn:hover {
+  color: var(--text-primary);
+  transform: scale(1.1);
+  text-shadow: 0 0 10px var(--primary);
+}
+
+.btn-tooltip {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.accent-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 8px;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.accent-dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--c);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 0 8px var(--c);
+}
+
+.accent-dot:hover {
+  transform: scale(1.3);
+}
+
+.accent-dot.active {
+  transform: scale(1.35);
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   MAIN 3D CARD WRAPPER
+   ========================================================================== */
+
+.main-wrapper {
+  position: relative;
+  z-index: 10;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.card-3d-wrapper {
+  perspective: 1200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 460px;
+}
+
+.card-3d {
+  position: relative;
+  width: 100%;
+  background: var(--card-bg);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid var(--card-border);
+  border-radius: 28px;
+  padding: 40px 36px 32px;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.65),
+    0 0 45px var(--card-border-glow),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out, box-shadow 0.4s ease;
+  overflow: hidden;
+}
+
+/* Dynamic Glare Reflection Overlay */
+.glass-glare {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  border-radius: 28px;
+  background: radial-gradient(
+    circle at var(--glare-x) var(--glare-y),
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0.04) 35%,
+    transparent 65%
+  );
+  opacity: var(--glare-opacity);
+  transition: opacity 0.3s ease;
+  mix-blend-mode: overlay;
+  z-index: 5;
+}
+
+/* ==========================================================================
+   BRAND HEADER & 3D HOLOGRAPHIC LOGO
+   ========================================================================== */
+
+.brand-header {
+  text-align: center;
+  margin-bottom: 24px;
+  transform: translateZ(40px);
+}
+
+.brand-logo-container {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-3d-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  opacity: 0.85;
+  filter: blur(10px);
+  animation: pulseLogoGlow 3s infinite alternate ease-in-out;
+}
+
+@keyframes pulseLogoGlow {
+  0% { transform: scale(0.9) rotate(0deg); opacity: 0.6; }
+  100% { transform: scale(1.1) rotate(15deg); opacity: 0.95; }
+}
+
+.logo-3d-core {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(30, 36, 68, 0.9), rgba(12, 16, 36, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8rem;
+  color: #ffffff;
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  animation: logoFloat 4s ease-in-out infinite;
+}
+
+.logo-3d-core i {
+  background: linear-gradient(135deg, #ffffff 30%, var(--primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 8px var(--primary-glow));
+}
+
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0) rotateX(0deg); }
+  50% { transform: translateY(-6px) rotateX(10deg); }
+}
+
+.brand-title {
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: linear-gradient(135deg, #ffffff 40%, var(--primary) 85%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 4px;
+  filter: drop-shadow(0 2px 14px var(--primary-glow));
+}
+
+.brand-tagline {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   TAB PILL BOX (Sign In / Register)
+   ========================================================================== */
+
+.tab-pill-box {
+  position: relative;
+  display: flex;
+  background: rgba(14, 18, 38, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  padding: 5px;
+  margin-bottom: 24px;
+  transform: translateZ(30px);
+}
+
+.tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 10px 0;
+  color: var(--text-secondary);
+  font-family: var(--font-main);
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 2;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.tab-btn.active {
+  color: #ffffff;
+  text-shadow: 0 0 10px var(--primary);
+}
+
+.tab-slider {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: calc(50% - 5px);
+  height: calc(100% - 10px);
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.4), rgba(6, 182, 212, 0.25));
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 15px var(--primary-glow);
+  border-radius: 12px;
+  z-index: 1;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
+}
+
+/* ==========================================================================
+   FORMS SLIDER & INPUTS
+   ========================================================================== */
+
+.forms-slider {
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(25px);
+}
+
+.auth-form {
+  display: none;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.auth-form.active {
+  display: block;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.input-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  pointer-events: none;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.input-group input {
+  width: 100%;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 14px;
+  padding: 16px 48px 16px 46px;
+  font-size: 0.95rem;
+  font-family: var(--font-main);
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+  background: rgba(28, 35, 68, 0.7);
+  border-color: var(--primary);
+  box-shadow: 0 0 18px var(--primary-glow);
+}
+
+.input-group:focus-within .input-icon,
+.input-group input:focus ~ .input-icon {
+  color: var(--primary);
+  transform: translateY(-50%) scale(1.15);
+}
+
+/* Floating Label */
+.input-group label {
+  position: absolute;
+  left: 46px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  background: transparent;
+}
+
+.input-group input:focus ~ label,
+.input-group input:not(:placeholder-shown) ~ label {
+  top: 0;
+  transform: translateY(-50%) scale(0.85);
+  left: 36px;
+  background: #0f132b;
+  padding: 2px 8px;
+  border-radius: 6px;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.eye-toggle {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1.05rem;
+  padding: 4px;
+  transition: color 0.3s ease;
+}
+
+.eye-toggle:hover {
+  color: var(--text-primary);
+}
+
+/* ==========================================================================
+   EXTRA FORM OPTIONS (Checkbox & Links)
+   ========================================================================== */
+
+.form-extra-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+  font-size: 0.85rem;
+}
+
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 8px;
+  color: var(--text-secondary);
+}
+
+.custom-checkbox input {
+  display: none;
+}
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  color: transparent;
+  transition: all 0.25s ease;
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.forgot-link, .custom-checkbox a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-weight: 500;
+}
+
+.forgot-link:hover, .custom-checkbox a:hover {
+  color: var(--secondary);
+  text-shadow: 0 0 8px var(--secondary-glow);
+}
+
+/* ==========================================================================
+   SUBMIT BUTTON (3D Glow, Wave & Magnetic Effect)
+   ========================================================================== */
+
+.submit-btn {
+  position: relative;
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--primary), #7c3aed 50%, var(--secondary));
+  background-size: 200% auto;
+  border: none;
+  border-radius: 14px;
+  font-family: var(--font-main);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px var(--primary-glow);
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transform: translateZ(20px);
+}
+
+.submit-btn:hover {
+  background-position: right center;
+  transform: translateZ(30px) translateY(-2px);
+  box-shadow: 0 14px 35px var(--primary-glow), 0 0 20px var(--secondary-glow);
+}
+
+.submit-btn:active {
+  transform: translateZ(10px) translateY(1px);
+}
+
+.submit-btn .btn-icon {
+  transition: transform 0.3s ease;
+}
+
+.submit-btn:hover .btn-icon {
+  transform: translateX(4px);
+}
+
+.btn-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, transparent 60%);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
+.submit-btn:hover .btn-glow {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Button Loading State */
+.submit-btn.loading {
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.submit-btn.loading .btn-icon {
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   DIVIDER & SOCIAL BUTTONS
+   ========================================================================== */
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 22px 0 18px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transform: translateZ(15px);
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.divider span {
+  padding: 0 12px;
+}
+
+.social-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 22px;
+  transform: translateZ(20px);
+}
+
+.social-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 8px;
+  background: rgba(22, 27, 52, 0.45);
+  border: 1px solid var(--input-border);
+  border-radius: 14px;
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.social-card i {
+  font-size: 1.25rem;
+  transition: transform 0.3s ease;
+}
+
+.social-card:hover {
+  background: rgba(35, 43, 80, 0.7);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.social-card:hover i {
+  transform: scale(1.15);
+  color: var(--primary);
+}
+
+/* ==========================================================================
+   FOOTER BADGE
+   ========================================================================== */
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  text-align: center;
+  transform: translateZ(10px);
+}
+
+.card-footer i {
+  color: #10b981;
+  font-size: 0.8rem;
+}
+
+/* ==========================================================================
+   TOAST NOTIFICATION COMPONENT
+   ========================================================================== */
+
+.toast-container {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  min-width: 300px;
+  max-width: 380px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: rgba(18, 22, 45, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  transform: translateX(120%);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+  opacity: 0;
+}
+
+.toast.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.toast-icon {
+  font-size: 1.3rem;
+}
+
+.toast.success {
+  border-left: 4px solid #10b981;
+}
+.toast.success .toast-icon {
+  color: #10b981;
+}
+
+.toast.info {
+  border-left: 4px solid var(--primary);
+}
+.toast.info .toast-icon {
+  color: var(--primary);
+}
+
+.toast.error {
+  border-left: 4px solid #f43f5e;
+}
+.toast.error .toast-icon {
+  color: #f43f5e;
+}
+
+.toast-content h4 {
+  font-size: 0.92rem;
+  margin-bottom: 2px;
+  font-weight: 600;
+}
+
+.toast-content p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+
+@media (max-width: 520px) {
+  .card-3d {
+    padding: 30px 22px 24px;
+    border-radius: 22px;
+  }
+
+  .brand-title {
+    font-size: 1.9rem;
+  }
+
+  .top-controls {
+    top: 15px;
+    right: 15px;
+    padding: 6px 12px;
+  }
+}

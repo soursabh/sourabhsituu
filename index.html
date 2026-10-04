@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bhaiuuu | 3D Next-Gen Portal</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Canvas for 3D Background Stars & Orbiting Cursor Particle Swarm -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Ambient Light Orbs for 3D Depth -->
+  <div class="ambient-glow orb-1"></div>
+  <div class="ambient-glow orb-2"></div>
+  <div class="ambient-glow orb-3"></div>
+
+  <!-- Custom Cursor Glow -->
+  <div id="cursorGlow"></div>
+  <div id="cursorDot"></div>
+
+  <!-- Audio Toggle & Theme Color Switcher Header Controls -->
+  <div class="top-controls">
+    <button id="soundToggle" class="control-btn" title="Toggle Futuristic Audio FX">
+      <i class="fa-solid fa-volume-high"></i>
+      <span class="btn-tooltip">Sound: On</span>
+    </button>
+    <div class="accent-picker" title="Change Theme Aura">
+      <span class="accent-dot active" data-color="purple" style="--c: #a855f7;"></span>
+      <span class="accent-dot" data-color="cyan" style="--c: #06b6d4;"></span>
+      <span class="accent-dot" data-color="emerald" style="--c: #10b981;"></span>
+      <span class="accent-dot" data-color="rose" style="--c: #f43f5e;"></span>
+    </div>
+  </div>
+
+  <!-- Main 3D Card Container -->
+  <div class="main-wrapper">
+    <div class="card-3d-wrapper" id="cardContainer">
+      <div class="card-3d" id="card3D">
+        
+        <!-- Specular Highlight Overlay for Realistic Glass Shimmer -->
+        <div class="glass-glare" id="glassGlare"></div>
+
+        <!-- 3D Holographic Floating Badge -->
+        <div class="brand-header">
+          <div class="brand-logo-container">
+            <div class="logo-3d-ring"></div>
+            <div class="logo-3d-core">
+              <i class="fa-solid fa-cube"></i>
+            </div>
+          </div>
+          <h1 class="brand-title">Bhaiuuu</h1>
+          <p class="brand-tagline"> 💕 SOURABH DABHDE ❤</p>
+        </div>
+
+        <!-- Mode Tabs: Sign In / Sign Up -->
+        <div class="tab-pill-box">
+          <button class="tab-btn active" id="tabLogin" data-target="loginForm">
+            <span>Sign In</span>
+          </button>
+          <button class="tab-btn" id="tabRegister" data-target="registerForm">
+            <span>Create Account</span>
+          </button>
+          <div class="tab-slider"></div>
+        </div>
+
+        <!-- Card Forms Container -->
+        <div class="forms-slider" id="formsSlider">
+          
+          <!-- LOGIN FORM -->
+          <form class="auth-form active" id="loginForm" autocomplete="off" onsubmit="return false;">
+            
+            <div class="input-group">
+              <div class="input-icon">
+                <i class="fa-solid fa-at"></i>
+              </div>
+              <input type="text" id="loginIdentifier" required placeholder=" " autocomplete="off" />
+              <label for="loginIdentifier">Email or Username</label>
+              <div class="input-line"></div>
+            </div>
+
+            <div class="input-group">
+              <div class="input-icon">
+                <i class="fa-solid fa-lock"></i>
+              </div>
+              <input type="password" id="loginPassword" required placeholder=" " />
+              <label for="loginPassword">Password</label>
+              <button type="button" class="eye-toggle" data-input="loginPassword" title="Show/Hide Password">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+              <div class="input-line"></div>
+            </div>
+
+            <div class="form-extra-row">
+              <label class="custom-checkbox">
+                <input type="checkbox" id="rememberMe" checked />
+                <span class="checkmark"><i class="fa-solid fa-check"></i></span>
+                <span class="label-text">Remember me</span>
+              </label>
+              <a href="#" class="forgot-link" id="forgotPasswordLink">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="submit-btn" id="loginSubmitBtn">
+              <span class="btn-text">SIGN IN TO BHAIUUU</span>
+              <span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+              <div class="btn-glow"></div>
+            </button>
+          </form>
+
+          <!-- REGISTER FORM -->
+          <form class="auth-form" id="registerForm" autocomplete="off" onsubmit="return false;">
+            
+            <div class="input-group">
+              <div class="input-icon">
+                <i class="fa-solid fa-user"></i>
+              </div>
+              <input type="text" id="regFullName" required placeholder=" " />
+              <label for="regFullName">Full Name</label>
+              <div class="input-line"></div>
+            </div>
+
+            <div class="input-group">
+              <div class="input-icon">
+                <i class="fa-solid fa-envelope"></i>
+              </div>
+              <input type="email" id="regEmail" required placeholder=" " />
+              <label for="regEmail">Email Address</label>
+              <div class="input-line"></div>
+            </div>
+
+            <div class="input-group">
+              <div class="input-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+              </div>
+              <input type="password" id="regPassword" required placeholder=" " />
+              <label for="regPassword">Create Secure Password</label>
+              <button type="button" class="eye-toggle" data-input="regPassword" title="Show/Hide Password">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+              <div class="input-line"></div>
+            </div>
+
+            <div class="form-extra-row">
+              <label class="custom-checkbox">
+                <input type="checkbox" id="termsCheck" required />
+                <span class="checkmark"><i class="fa-solid fa-check"></i></span>
+                <span class="label-text">I accept Bhaiuuu's <a href="#">Terms & Privacy</a></span>
+              </label>
+            </div>
+
+            <button type="submit" class="submit-btn" id="regSubmitBtn">
+              <span class="btn-text">CREATE YOUR ACCOUNT</span>
+              <span class="btn-icon"><i class="fa-solid fa-user-plus"></i></span>
+              <div class="btn-glow"></div>
+            </button>
+          </form>
+
+        </div>
+
+        <!-- Social Separator -->
+        <div class="divider">
+          <span>or continue with</span>
+        </div>
+
+        <!-- 3D Social Buttons -->
+        <div class="social-grid">
+          <button type="button" class="social-card" title="Continue with Google">
+            <i class="fa-brands fa-google"></i>
+            <span>Google</span>
+          </button>
+          <button type="button" class="social-card" title="Continue with GitHub">
+            <i class="fa-brands fa-github"></i>
+            <span>GitHub</span>
+          </button>
+          <button type="button" class="social-card" title="Continue with Apple">
+            <i class="fa-brands fa-apple"></i>
+            <span>Apple</span>
+          </button>
+        </div>
+
+        <!-- Footer Security Badge -->
+        <div class="card-footer">
+          <i class="fa-solid fa-lock"></i>
+          <span>End-to-End Quantum Encrypted &bull; Bhaiuuu v2.0</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>

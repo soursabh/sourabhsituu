@@ -1,0 +1,25 @@
+{
+  "name": "bhaiuuu-ai-portal",
+  "version": "2.0.0",
+  "description": "Bhaiuuu 3D Futuristic Portal & Gemini AI Workspace",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1"
+  },
+  "keywords": [
+    "gemini",
+    "ai",
+    "3d",
+    "chatbot",
+    "portal"
+  ],
+  "author": "SOURABH DABHDE",
+  "license": "MIT"
+}
